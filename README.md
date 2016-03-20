@@ -1,12 +1,8 @@
 # sf_installer
-Installs the Symfony framework (2.8) as a desired "project" to the current working
-directory(cwd), which includes some mandatory bundles (see mod_bundle) and
-configurations.
-To get the 'clean' Symfony installation working, is to adjust the database
-settings in "project"/app/config/parameters.yml and finnally run:
-```sh
-    app/console server:run
-```
+Installs the Symfony framework (2.8) as a desired "project" to the current
+working directory(cwd), which includes some mandatory bundles (see mod_bundle)
+and configurations. To get the 'clean' Symfony installation working, adjust the
+database settings in "project"/app/config/parameters.yml.
 
 ####Installation (as root):
 ```sh
