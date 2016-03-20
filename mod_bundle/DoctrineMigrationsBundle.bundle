@@ -17,10 +17,6 @@ if [[ -d ${project_name}/vendor/doctrine/doctrine-migrations-bundle ]]; then
     's/DoctrineBundle(),/DoctrineBundle(),\n\t\tnew\ Doctrine\\Bundle\\MigrationsBundle\\DoctrineMigrationsBundle(),/g' \
     ${project_name}/app/AppKernel.php
     prntOK
-
-    prntWithSpaces "Finalizing DoctrineMigrationsBundle(composer update)..."
-    $(cd ${project_name} && eval ${composer} update >/dev/null 2>&1)
-    prntOK
 else
     prntERR
     prntMessage "Sorry, can't install DoctrineMigrationsBundle." "err"

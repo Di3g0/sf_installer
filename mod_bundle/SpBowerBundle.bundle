@@ -50,16 +50,6 @@ if [[ -d ${project_name}/vendor/sp/bower-bundle ]]; then
 
     ## just print OK, check follows
     prntOK
-
-    ## finalizing BowerBundle
-    prntWithSpaces "Finalizing SpBowerBundle(composer update)..."
-    $(cd ${project_name} && eval ${composer} update >/dev/null 2>&1)
-    if [[ ${project_name}//src/AppBundle/Resources/public/bower_components ]]; then
-        prntOK
-    else
-        prntERR
-        prntMessage "Sorry, can't install SpBowerBundle." "err"
-    fi
 else
     prntERR
     prntMessage "Sorry, can't install SpBowerBundle." "err"

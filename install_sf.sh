@@ -20,15 +20,25 @@ CAgJyVrZXJuZWwuY2FjaGVfZGlyJS9kYXRhLnNxbGl0ZSc="
 
 ## Welcome message
 prntMessage "=== Symfony Framework installer (2.8) ==="
-echo -e
+echo -e ""
 
 ## checking if $1 (project_name) is set
 if [[ -z $1 ]]; then
-    prntCRIT "usage: $0 <project_name>"
-elif [[ -d $1 ]]; then
-    prntCRIT "Sorry, project ($1) exists already."
-else 
+    prntMessage "usage: $0 <project_name> <options>\noptions:\n -f\tforce overwrite"
+    exit 0;
+else
     project_name=$1
+    if [[ $2 == "-f" ]] && [[ -d ${project_name} ]]; then
+        prntWithSpaces "Deleting existing project: '${project_name}' (due -f option)..."
+        rm -rf ${project_name}
+        if [[ -d ${project_name} ]]; then
+            prntERR; exit 1;
+        fi
+        prntOK
+        echo -e ""
+    elif [[ -d ${project_name} ]]; then
+        prntCRIT "Sorry, project ($1) exists already."
+    fi
 fi
 
 ## checking for binaries (php, composer, npm, bower, symfony)
@@ -46,7 +56,7 @@ else
         composer=${composer:1:-1}
     fi
 fi
-echo -e
+echo -e ""
 
 ## preparing symfony base-installlation...
 prntWithSpaces "Installing Symfony 2.8..."
@@ -59,7 +69,12 @@ if [[ -d ${project_name} ]]; then
         source ${bundle};
     done
 
-    ## installing SymfonyAsseticBundle
+    ## finalizing install (comperser update)
+    prntWithSpaces "Finalizing Symfony 2.8 (composer update)..."
+    $(cd ${project_name} && eval ${composer} update >/dev/null 2>&1)
+    prntOK
+
+    echo -e ""
     prntWithSpaces "Fixing test-environment..."
     ## patching config_test.yml
     echo $CONFTST_YML_B64 | base64 -d >> ${project_name}/app/config/config_test.yml
@@ -67,7 +82,7 @@ if [[ -d ${project_name} ]]; then
 else
     prntCRIT "Sorry, can't install Symfony 2.8."
 fi
-echo -e
+echo -e ""
 
 prntMessage "Symfony 2.8 setup complete."
 
