@@ -43,7 +43,7 @@ fi
 
 ## checking for binaries (php, composer, npm, bower, symfony)
 prntMessage "Checking for needed binaries/aliases..."
-chkBinMulti "bash, awk, sed, whereis, php, composer, npm, bower, symfony"
+chkBinMulti "awk, base64, bash, bower, composer, npm, php, sed, symfony, whereis"
 if [[ $SH_ERROR -eq 1 ]]; then
     prntCRIT "Sorry some dependencies are missing. please fix them!"
 else
