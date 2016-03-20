@@ -34,9 +34,22 @@ if [[ -z $1 ]]; then
     help " (this message)"
     exit 0;
 else
+    parms="$@"
     ## parsing options..
     while [[ $# -gt 0 ]]; do
         case "$1" in
+            -u|-au|--update)
+                prntMessage "Try to Update myself..."
+                real_app=$(readlink -eq `whereis install_sf | cut -d ' ' -f2`)
+                real_app_dir=$(dirname ${real_app})
+                if [[ -d ${real_app_dir} ]]; then
+                    echo -n "root-"
+                    $(su -c "cd ${real_app_dir} && git pull >/dev/null 2>&1")
+                    prntMessage "Updated succeeded, please rerun." "ok"
+                else
+                    prntMessage "Update failed." "err"
+                fi
+                exit 0; ;;
             -h|--h|--help)
                 help " (this message)"; exit 0; ;;
             -f)
