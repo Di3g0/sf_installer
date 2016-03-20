@@ -22,10 +22,11 @@ CAgJyVrZXJuZWwuY2FjaGVfZGlyJS9kYXRhLnNxbGl0ZSc="
 prntMessage "=== Symfony Framework installer (2.8) ===\n"
 
 function help {
-    prntMessage "usage: $0 <project_name> <options>\n\
+    prntMessage "usage: $0 <project_name> [<options>]\n\
         options:\n\
          -f\tforce overwrite\n\
          -h\thelp$1\n\
+         -u\tupdates install_sf (if available)\n\
          -y\tYes to all questions"
 }
 
