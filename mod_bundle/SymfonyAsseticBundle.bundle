@@ -1,0 +1,27 @@
+#!/bin/bash
+
+## installing SymfonyAsseticBundle
+prntWithSpaces "Installing SymfonyAsseticBundle..."
+## patching php version, <6.4 not supported by bundle
+sed -i \
+    's/"php":\ "5.3.9"/"php":\ "5.6"/g' \
+    ${project_name}/composer.json
+$(cd ${project_name} \
+    && eval ${composer} require/symfony/assetic-bundle >/dev/null 2>&1)
+if [[ -d ${project_name}/vendor/symfony/assetic-bundle ]]; then
+    prntOK
+    ## patching configurations...
+    prntWithSpaces "Configuring SymfonyAsseticBundle..."
+    ## patching AppKernel.php
+    sed -i \
+    's/DoctrineBundle(),/DoctrineBundle(),\n\t\tnew\ Symfony\\Bundle\\AsseticBundle\\AsseticBundle(),/g' \
+    ${project_name}/app/AppKernel.php
+    prntOK
+
+    prntWithSpaces "Finalizing SymfonyAsseticBundle(composer update)..."
+    $(cd ${project_name} && eval ${composer} update >/dev/null 2>&1)
+    prntOK
+else
+    prntERR
+    prntMessage "Sorry, can't install SymfonyAsseticBundle." "err"
+fi

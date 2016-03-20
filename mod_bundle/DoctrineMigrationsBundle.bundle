@@ -1,0 +1,27 @@
+#!/bin/bash
+
+## installing DoctrineMigrationsBundle
+prntWithSpaces "Installing DoctrineMigrationsBundle..."
+## patching php version, <6.4 not supported by bundle
+sed -i \
+    's/"php":\ "5.3.9"/"php":\ "5.6"/g' \
+    ${project_name}/composer.json
+$(cd ${project_name} \
+    && eval ${composer} require doctrine/doctrine-migrations-bundle:^1.0 >/dev/null 2>&1)
+if [[ -d ${project_name}/vendor/doctrine/doctrine-migrations-bundle ]]; then
+    prntOK
+    ## patching configurations...
+    prntWithSpaces "Configuring DoctrineMigrationsBundle..."
+    ## patching AppKernel.php
+    sed -i \
+    's/DoctrineBundle(),/DoctrineBundle(),\n\t\tnew\ Doctrine\\Bundle\\MigrationsBundle\\DoctrineMigrationsBundle(),/g' \
+    ${project_name}/app/AppKernel.php
+    prntOK
+
+    prntWithSpaces "Finalizing DoctrineMigrationsBundle(composer update)..."
+    $(cd ${project_name} && eval ${composer} update >/dev/null 2>&1)
+    prntOK
+else
+    prntERR
+    prntMessage "Sorry, can't install DoctrineMigrationsBundle." "err"
+fi

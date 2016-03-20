@@ -1,0 +1,66 @@
+#!/bin/bash
+
+## BowerBundle configuration  (config.yml)- base64 encoded
+BOWER_YML_B64="c3BfYm93ZXI6DQogICAgYmluOiB+YmJ+ICMgT3B0aW9uYWwNCiAgICBhc3NldGl\
+jOg0KICAgICAgICBlbmFibGVkOiBmYWxzZQ0KICAgIGJ1bmRsZXM6DQogICAgICAgIEFwcEJ1bmRsZ\
+ToNCiAgICAgICAgICAgIGNvbmZpZ19kaXI6IFJlc291cmNlcy9jb25maWcNCiAgICAgICAgICAgIGN\
+hY2hlOiAla2VybmVsLnJvb3RfZGlyJS9jYWNoZS9ib3dlcg0KICAgICAgICAgICAgYXNzZXRfZGlyO\
+iAuLi9wdWJsaWMvYm93ZXJfY29tcG9uZW50cw=="
+## BowerBundle configuration (bower.json) - base64 encoded
+BOWER_JSON_B64="ew0KICAgICJuYW1lIjogIn5hbn4iLA0KICAgICJkZXBlbmRlbmNpZXMiOiB7DQ\
+ogICAgICAgICJib290c3RyYXAiOiAifjMuMy41IiwNCiAgICAgICAgImJvb3RzdHJhcC1kYXRlcGlj\
+a2VyIjogIn4xLjUuMCIsDQogICAgICAgICJmb250LWF3ZXNvbWUiOiAifjQuNC4wIiwNCiAgICAgIC\
+AgImJvb3RzdHJhcC1zYXNzIjogIn4zLjMuNSINCiAgICB9DQp9"
+
+## main default install routine..
+prntWithSpaces "Installing SpBowerBundle..."
+## very bad implementation... need to get around "eval"...
+$(cd ${project_name} \
+    && eval ${composer} require sp/bower-bundle >/dev/null 2>&1)
+if [[ -d ${project_name}/vendor/sp/bower-bundle ]]; then
+    prntOK
+    ## patching configurations...
+    prntWithSpaces "Configuring SpBowerBundle..."
+    
+    ## patching config.yml
+    bower=`whereis bower | awk '{print $2}'`
+    echo $BOWER_YML_B64 | base64 -d > ${project_name}.tmp
+    sed -i "s@~bb~@${bower}@g" ${project_name}.tmp
+    sed -i $'s/\r$//' ${project_name}.tmp
+    cat ${project_name}.tmp >> ${project_name}/app/config/config.yml
+    rm ${project_name}.tmp
+
+    ## patching bower.json
+    mkdir -p ${project_name}/src/AppBundle/Resources/config
+    echo $BOWER_JSON_B64 | base64 -d > ${project_name}.tmp
+    sed -i "s@~an~@${project_name}@g" ${project_name}.tmp
+    sed -i $'s/\r$//' ${project_name}.tmp
+    cat ${project_name}.tmp > ${project_name}/src/AppBundle/Resources/config/bower.json
+    rm ${project_name}.tmp
+
+    ## patching composer.json
+    sed -i \
+    's/clearCache",/clearCache",\n\t\t"Sp\\\\BowerBundle\\\\Composer\\\\ScriptHandler::bowerInstall\",/g' \
+    ${project_name}/composer.json
+
+    ## patching AppKernel.php
+    sed -i \
+    's/DoctrineBundle(),/DoctrineBundle(),\n\t\tnew\ Sp\\BowerBundle\\SpBowerBundle(),/g' \
+    ${project_name}/app/AppKernel.php
+
+    ## just print OK, check follows
+    prntOK
+
+    ## finalizing BowerBundle
+    prntWithSpaces "Finalizing SpBowerBundle(composer update)..."
+    $(cd ${project_name} && eval ${composer} update >/dev/null 2>&1)
+    if [[ ${project_name}//src/AppBundle/Resources/public/bower_components ]]; then
+        prntOK
+    else
+        prntERR
+        prntMessage "Sorry, can't install SpBowerBundle." "err"
+    fi
+else
+    prntERR
+    prntMessage "Sorry, can't install SpBowerBundle." "err"
+fi
