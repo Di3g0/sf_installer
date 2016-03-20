@@ -17,5 +17,6 @@ database settings in "project"/app/config/parameters.yml.
         options:
          -f force overwrite
          -h help
+         -u updates install_sf (if available)
          -y Yes to all questions
 ```
