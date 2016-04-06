@@ -112,7 +112,7 @@ else
     prntWithSpaces "Checking for enough(${tmpnspace}M) free disk space on '${tmppath}'..."
     if [[ ! -z ${tmpmount} ]]; then
         tmpsleft=$(echo ${tmpmount} | awk '{print $4}')
-        if [[ ! -z ${tmpsleft} ]] && [[ ${tmpsleft} -gt $((tmpnspace*1024)) ]]; then
+        if [[ ! -z ${tmpsleft} ]] && [[ ${tmpsleft} -ge $((tmpnspace*1024)) ]]; then
             prntOK
         else
             prntERR

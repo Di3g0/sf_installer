@@ -83,7 +83,7 @@ function chkBin {
         chkBinMulti $bin
         return;
     fi
-    prntWithSpaces "checking for '$bin'.."
+    prntWithSpaces "Checking for '$bin'.."
     if [[ `builtin type $bin 2>/dev/null` ]] || [[ `echo $(bash -i -c 'alias') | grep $bin` ]]; then
         prntOK
     else
