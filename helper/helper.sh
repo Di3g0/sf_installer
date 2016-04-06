@@ -12,7 +12,7 @@ SH_QUIT_ON_ERROR=0
 
 ### [info] - begin
 function prntWithSpaces {
-    spaces=$(($(tput cols)-$(expr length "$1")-10))
+    spaces=$(($(tput cols)-$(expr length "$1")-4))
     if [[ $# == 2 ]]; then
         echo -ne $1
         for ((i=0; i<=${spaces}; i++)); do
@@ -20,7 +20,7 @@ function prntWithSpaces {
         done
         echo -e "$2$2$2$2"
     else
-        tabs -$(($(tput cols)-4))
+        tabs $(($(tput cols)-4))
         echo -ne $1
     fi
 }
