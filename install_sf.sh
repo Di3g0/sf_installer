@@ -92,7 +92,7 @@ fi
 
 ## checking for binaries (php, composer, npm, bower, symfony)
 prntMessage "Checking for needed binaries/aliases..."
-chkBinMulti "awk, base64, bash, bower, composer, npm, php, sed, symfony, whereis"
+chkBinMulti "awk, base64, bash, bower, composer, df, npm, php, sed, symfony, whereis"
 if [[ $SH_ERROR -eq 1 ]]; then
     prntCRIT "Sorry some dependencies are missing. please fix them!"
 else
@@ -103,6 +103,23 @@ else
         composer=$(echo -e $(bash -i -c "alias" \
         | awk -v FS="(composer=| alias=)" '{print $2}') | tr -d '[[:space:]]')
         composer=${composer:1:-1}
+    fi
+
+    ## checking for enough free space on /tmp
+    tmppath="/tmp"
+    tmpnspace=25
+    tmpmount=$(df | grep ${tmppath})
+    prntWithSpaces "Checking for enough(${tmpnspace}M) free disk space on '${tmppath}'..."
+    if [[ ! -z ${tmpmount} ]]; then
+        tmpsleft=$(echo ${tmpmount} | awk '{print $4}')
+        if [[ ! -z ${tmpsleft} ]] && [[ ${tmpsleft} -gt $((tmpnspace*1024)) ]]; then
+            prntOK
+        else
+            prntERR
+            prntCRIT "Sorry not enough free disk space on '${tmppath}'. please fix it!"
+        fi
+    else
+        prntOK
     fi
 fi; echo
 
