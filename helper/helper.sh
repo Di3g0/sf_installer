@@ -12,30 +12,30 @@ SH_QUIT_ON_ERROR=0
 
 ### [info] - begin
 function prntWithSpaces {
-    echo -ne $1
-    for ((i=1; i<=(( $(tput cols)-$(expr length "$1")-4 )); i++)); do
-        if [[ $# == 2 ]]; then
-            echo -ne "$2"
-        else
-            echo -ne " "
-        fi
-    done
+    spaces=$(($(tput cols)-$(expr length "$1")-10))
     if [[ $# == 2 ]]; then
+        echo -ne $1
+        for ((i=0; i<=${spaces}; i++)); do
+            echo -ne "$2"
+        done
         echo -e "$2$2$2$2"
+    else
+        tabs -$(($(tput cols)-4))
+        echo -ne $1
     fi
 }
 function prntInfo {
-    echo -e "[\033[01;32m**\033[00m]"
+    echo -e "\t[\033[01;32m**\033[00m]"
 }
 function prntOK {
-    echo -e "[\033[01;32m++\033[00m]"
+    echo -e "\t[\033[01;32m++\033[00m]"
 }
 function prntWARN {
-    echo -e "[\033[01;33m--\033[00m]"
+    echo -e "\t[\033[01;33m--\033[00m]"
 }
 function prntERR {
     SH_ERROR=1
-    echo -e "[\033[01;31m!!\033[00m]"
+    echo -e "\t[\033[01;31m!!\033[00m]"
     if [[ $SH_QUIT_ON_ERROR -eq 1 ]]; then
         prntMessage "Error, exiting!"
         cleanup
@@ -69,7 +69,7 @@ function prntMessage {
                 ;;
         esac
     elif [[ $# == 1 ]]; then
-        echo -e "$1"
+        echo -e $1
     else
         echo -e ""
     fi
@@ -104,5 +104,6 @@ function chkBinMulti {
 ### [Cleanup] - begin
 function cleanup {
     unset SH_QUIT_ON_ERROR SH_ERROR
+    tabs -8
 }
 ### [Cleanup] - end
