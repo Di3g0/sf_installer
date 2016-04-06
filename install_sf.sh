@@ -44,7 +44,7 @@ else
                 real_app=$(readlink -eq `whereis install_sf | cut -d ' ' -f2`)
                 real_app_dir=$(dirname ${real_app})
                 if [[ -d ${real_app_dir} ]]; then
-                    echo -n "root-"
+                    if [[ $EUID -ne 0 ]]; then echo -n "root-"; fi
                     $(su -c "cd ${real_app_dir} && git pull >/dev/null 2>&1")
                     prntMessage "Updated succeeded, please rerun." "ok"
                 else
@@ -107,7 +107,7 @@ else
 
     ## checking for enough free space on /tmp
     tmppath="/tmp"
-    tmpnspace=25
+    tmpnspace=50
     tmpmount=$(df | grep ${tmppath})
     prntWithSpaces "Checking for enough(${tmpnspace}M) free disk space on '${tmppath}'..."
     if [[ ! -z ${tmpmount} ]]; then
