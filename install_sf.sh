@@ -19,15 +19,16 @@ gICAgICAgICAgICAgZHJpdmVyOiAgIHBkb19zcWxpdGUNCiAgICAgICAgICAgICAgICBwYXRoOiAgI\
 CAgJyVrZXJuZWwuY2FjaGVfZGlyJS9kYXRhLnNxbGl0ZSc="
 
 ## Welcome message
+tabs -n 8
 prntMessage "=== Symfony Framework installer (2.8) ===\n"
 
 function help {
     prntMessage "usage: $0 <project_name> [<options>]\n\
         options:\n\
-         -f\tforce overwrite\n\
-         -h\thelp$1\n\
-         -u\tupdates install_sf (if available)\n\
-         -y\tYes to all questions"
+         \t-f\tforce overwrite\n\
+         \t-h\thelp$1\n\
+         \t-u\tupdates install_sf (if available)\n\
+         \t-y\tyes to all questions"
 }
 
 ## checking if $1 (project_name) is set
