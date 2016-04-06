@@ -10,6 +10,9 @@
 SH_ERROR=0
 SH_QUIT_ON_ERROR=0
 
+## set default tab-width.. (8 spaces)
+tabs -n 8
+
 ### [info] - begin
 function prntWithSpaces {
     spaces=$(($(tput cols)-$(expr length "$1")-4))

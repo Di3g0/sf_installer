@@ -19,7 +19,6 @@ gICAgICAgICAgICAgZHJpdmVyOiAgIHBkb19zcWxpdGUNCiAgICAgICAgICAgICAgICBwYXRoOiAgI\
 CAgJyVrZXJuZWwuY2FjaGVfZGlyJS9kYXRhLnNxbGl0ZSc="
 
 ## Welcome message
-tabs -n 8
 prntMessage "=== Symfony Framework installer (2.8) ===\n"
 
 function help {
