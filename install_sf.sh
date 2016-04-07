@@ -90,9 +90,9 @@ else
     fi; echo
 fi
 
-## checking for binaries (php, composer, npm, bower, symfony)
+## checking for binaries
 prntMessage "Checking for needed binaries/aliases..."
-chkBinMulti "awk, base64, bash, bower, composer, df, npm, php, sed, symfony, whereis"
+chkBinMulti "awk, base64, bash, bower, curl, df, npm, php, sed, whereis, composer, symfony"
 if [[ $SH_ERROR -eq 1 ]]; then
     prntCRIT "Sorry some dependencies are missing. please fix them!"
 else
@@ -154,8 +154,7 @@ if [[ -d ${project_name} ]]; then
     prntOK
 else
     prntCRIT "Sorry, can't install Symfony 2.8."
-fi
-echo
+fi; echo
 
 prntMessage "Symfony 2.8 setup complete."
 

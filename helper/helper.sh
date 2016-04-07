@@ -91,7 +91,7 @@ function chkBin {
         prntOK
     else
         prntERR
-        prntMessage "\tplease install '$bin', or add an alias to it."
+        showBinMessage $bin
         unset bin
     fi
 }
@@ -101,6 +101,27 @@ function chkBinMulti {
         chkBin ${items[index]}
     done
     unset items index IFS
+}
+function showBinMessage {
+    case "$1" in
+        "composer")
+            prntMessage "installing composer..."
+            mkdir -p ~/.config/composer
+            $(cd ~/.config/composer && wget https://getcomposer.org/composer.phar >/dev/null 2>&1 && chmod +x composer.phar)
+            alias composer='~/.config/composer/composer.phar'
+            prntMessage "please add: alias composer='~/.config/composer/composer.phar'" "info"
+            prntMessage "composer installation succeeded, please rerun." "ok"
+            ;;
+        "symfony")
+            prntMessage "installing symfony..."
+            if [[ $EUID -ne 0 ]]; then echo -n "root-"; fi
+            $(su -c "curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony && chmod a+x /usr/local/bin/symfony")
+            prntMessage "symfony installation succeeded, please rerun." "ok"
+            ;;
+        *)
+            prntMessage "please install '$1', or add an alias to it."
+            ;;
+    esac
 }
 ### [bin-check] - end
 
