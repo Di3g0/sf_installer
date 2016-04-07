@@ -23,7 +23,7 @@ function prntWithSpaces {
         done
         echo -e "$2$2$2$2"
     else
-        tabs -n $(($(tput cols)-4))
+        tabs $(($(tput cols)-4))
         echo -ne $1
     fi
 }
