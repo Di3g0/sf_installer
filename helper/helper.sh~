@@ -16,12 +16,13 @@ tabs -n 8
 ## getting "superuser" command..
 case $(awk -F= '/^NAME/{print tolower($2)}' /etc/os-release | sed "s/\"//g") in
     "ubuntu")
-        suCmd="sudo sh -c"
+        suCmd="sudo"
         ;;
     *)
     	suCmd="su -c"
     	;;
 esac
+echo -e "${OS_VERSION}: "${suCmd}
 
 ### [info] - begin
 function prntWithSpaces {
