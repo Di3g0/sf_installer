@@ -124,7 +124,7 @@ function showBinMessage {
             ;;
         "symfony")
             prntMessage "installing symfony..."
-            if [[ $EUID -ne 0 && ${suCmd} != "sudo" ]]; then echo -n "root-"; fi
+            if [[ $EUID -ne 0 && ${suCmd} != "sudo sh -c" ]]; then echo -n "root-"; fi
             $(${suCmd} "curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony && chmod a+x /usr/local/bin/symfony")
             prntMessage "symfony installation succeeded, please rerun." "ok"
             ;;
